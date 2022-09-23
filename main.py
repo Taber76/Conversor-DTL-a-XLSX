@@ -19,21 +19,21 @@ def cargaArchivos(): #selecciono archivos dlt a convertir
 
 def obtenerPlanillas(): #convierto archivos dtl a csv y devuelvo la ruta donde los cree 
   
-  easyConverter = r"C:\Users\tbermudez\Desktop\Efluentes\EasyConverter\Easyconverter"
+  easyConverter = r"C:\Users\tbermudez\Desktop\Efluentes\EasyConverter\Easyconverter" #ruta donde esta ubicada la aplicacion easyConverter
   listaArchivosDTL = cargaArchivos()
   ruta = ''
 
   print(f"Convirtiendo {len(listaArchivosDTL)} archivos .dtl a .cvs")
 
   for item in listaArchivosDTL:
-    if item[-3:] == "dtl":
+    if item[-3:] == "dtl": #solo proceso archivos con extension DTL
 
       itemb = item.replace('/', '\\')
       origen = itemb
       destino = itemb[0:-3] + "csv"
       argumentos = f"\"{origen}\" \"{destino}\""
   
-      system(easyConverter + " " + argumentos)
+      system(easyConverter + " " + argumentos) #es recomendable usar la libreria SUBPROCCES pero no lo pude hacer funcionar
 
       ruta = item[0:-12]
 
@@ -56,10 +56,10 @@ def crearDF(ruta): #cargo un DataFrame de los csv en la ruta especificada
 
 def resumenDF(df): #creo un DataFrame con promedios diarios
 
-  dffinal = pd.DataFrame(columns=['Fecha', 'PH promedio', 'Caudal Promedio', 'Cantidad de valores'])
-  fechas = df['Fecha'].unique()
+  dffinal = pd.DataFrame(columns=['Fecha', 'PH promedio', 'Caudal Promedio', 'Cantidad de valores']) #df vacio con las columnas de interes
+  fechas = df['Fecha'].unique() #df con todas las fechas incluidas en el df original
 
-  for item in fechas:
+  for item in fechas: #promedio de cada columna en cada fecha
     dffinal.loc[dffinal.shape[0]] = [item, round(df.loc[df['Fecha'] == item, 'PH'].mean(), 2),  round(df.loc[df['Fecha'] == item, 'Caudal'].mean(), 2), round(df.loc[df['Fecha'] == item, 'PH'].count(), 2)]
 
   return dffinal
